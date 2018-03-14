@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
-
 from parse_arg import parse_args
 from read_config import read_config
 from parse_dir import parse_dir
+from alloc_tasks import alloc_tasks
 import tinify
 import sys
+import os
 
 __author__ = 'sunxiao'
 __copyright__ = 'Copyright 2018, The EllaClub organization'
@@ -28,6 +29,7 @@ if __name__ == '__main__':
     img_tar_list = []
     remain_num_list = {}
     remain_all_num = 0
+    tasks = {}
     # 读取命令行参数
     args = parse_args()
     # 从命令行中读取的目标目录，读取相应的需要处理的文件
@@ -52,10 +54,29 @@ if __name__ == '__main__':
             remain_num_list[key] = 200
             remain_all_num += 200
         else:
-            remain_num_list[key] = remain
-            remain_all_num += remain
+            remain_num_list[key] = 200 - remain
+            remain_all_num += 200 - remain
+    print(remain_all_num)
+    exit()
     # 判断当前的剩余值是否还够本次的压缩需求
-    if img_list.count > remain_all_num:
+    if len(img_list) > remain_all_num:
         print("the remain tiny pic num is ", remain_all_num, ',but your img is ', img_list.count,
               ',pls add a new key or change another key!!')
         sys.exit()
+    tasks = alloc_tasks(remain_num_list, img_list, img_tar_list)
+    # 开始处理任务列表
+    for key in tasks:
+        for num in range(len(tasks[key]['img'])):
+            img = tasks[key]['img'][num]
+            tar = tasks[key]['tar'][num]
+            print("process the img:", img, " ...")
+            tar_dir = os.path.dirname(tar)
+            if not os.path.exists(tar_dir):
+                os.mkdir(tar_dir)
+            if not os.path.exists(img):
+                print("the file:", img, " is not exists!!!")
+                break
+            tinify.key = key
+            source = tinify.from_file(img)
+            source.to_file(tar)
+    print("process finished!!!")
