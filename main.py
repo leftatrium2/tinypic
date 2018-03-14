@@ -40,6 +40,9 @@ if __name__ == '__main__':
     img_tar_list = all_files['tar']
     # 从命令行参数中，读取配置文件信息
     config_path = args['conf']
+    if not os.path.exists(config_path):
+        print("cant find the config path,pls use -c [path] to tell me the true path!!!")
+        exit()
     arrs = read_config(config_path)
     keys = arrs['key']
     print("key list:", keys)
