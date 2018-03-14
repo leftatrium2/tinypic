@@ -42,6 +42,7 @@ if __name__ == '__main__':
     config_path = args['conf']
     arrs = read_config(config_path)
     keys = arrs['key']
+    print("key list:", keys)
     # 读取代理路径【如果有】
     if arrs['proxy'] != '':
         proxy = arrs['proxy']
