@@ -56,8 +56,6 @@ if __name__ == '__main__':
         else:
             remain_num_list[key] = 200 - remain
             remain_all_num += 200 - remain
-    print(remain_all_num)
-    exit()
     # 判断当前的剩余值是否还够本次的压缩需求
     if len(img_list) > remain_all_num:
         print("the remain tiny pic num is ", remain_all_num, ',but your img is ', img_list.count,
